@@ -1,0 +1,43 @@
+{% extends "FECODER_APP/padre.html" %}
+
+{% load static %}
+
+{% block fotoUser %}
+    
+    {% if avatar %}
+        <img src="{{avatar}}" width="40px">
+    {% else  %}
+        <img src="/media/default.png" width="40px">
+    {% endif %}
+        
+{% endblock fotoUser %}
+
+{% block contenido %}
+    {% if form_post.errors %}
+        <p style="color: red">¡Datos son incorrectos!</p>
+    {% endif %}
+
+    {% if postCreado %}
+        <p style="color: green">Post creado exitosamente!!</p>
+    {% endif %}
+    
+
+    {% if error %}
+        <p style="color: red">{{ error }}</p>
+    {% endif %}
+    <div class="container" style="color:white">
+        <form action="{% url 'formularioPosts' %}" method="POST" enctype="multipart/form-data">{% csrf_token %}
+
+                {{form_post.as_p}}
+              
+                {{form_post.media}}
+              
+              
+            
+            <button class="btn btn-primary" id="button-search" type="submit" >Enviar</button>
+        </form>
+    </div>
+    <br>
+
+    
+{% endblock %}

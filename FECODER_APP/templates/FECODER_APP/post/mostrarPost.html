@@ -1,0 +1,149 @@
+{% extends 'FECODER_APP/padre.html' %}
+    
+    {% load static %}
+
+    {% block fotoUser %}
+    
+    {% if avatar %}
+        <img src="{{avatar}}" width="40px">
+    {% else  %}
+        <img src="/media/default.png" width="40px">
+    {% endif %}
+        
+{% endblock fotoUser %}
+    {% block contenido %}
+</div>
+        
+    <div class="row mt-5 pt-3" style="color:black">
+        <div class="col-md offset-md">
+            <div class="card my-3 shadow">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">   
+                           
+                            <img style="background-color: black; width: 415px;" class="img-thumbnail" src="{{ img }}" alt="profile-img">
+                        </div>
+                        <div class="col-md-8">
+                            <small>{{ post.fecha_post }} |  <a href="{% url 'verPerfil' post.usuario_post.id %} ">{{post.usuario_post}}</a> </small>
+                            
+                            <br><br>
+                            {% if request.user.username == 'admin' %}
+                            <span><a class="eliminar btn btn-danger float-right btn-sm"
+                                    href="{% url 'borrarPost' post.id %}">Eliminar</a></span>
+                            <span><a class="btn btn-primary mx-2 float-right btn-sm"
+                                      href="{% url 'editarPost' post.id %}"> Editar</a></span>
+                            
+                            {% if post.estatus_post %}
+                            <span><a class="btn btn-danger mx-2 float-right btn-sm"
+                                href="{% url 'desactivarPost' post.id %}">Desactivar</a></span>
+                                
+                            {% elif not post.estatus_post  %}
+                            <span><a class="btn btn-success mx-2 float-right btn-sm"
+                                href="{% url 'desactivarPost' post.id %}">Activar</a></span>
+                            
+                            {% endif %}
+                                
+                            
+                            {% elif post.usuario_post == request.user%}
+                                
+                                <span><a class="eliminar btn btn-danger float-right btn-sm"
+                                        href="{% url 'borrarPost' post.id %}"> Eliminar</a></span>
+                                <span><a class="open-incident btn btn-primary mx-2 float-right btn-sm"
+                                        href="{% url 'editarPost' post.id %}" data-popup-url="{%url 'editarPost' post.id %}"> Editar</a></span>
+                                
+                             {% if post.estatus_post %}
+                            <span><a class="btn btn-danger mx-2 float-right btn-sm"
+                                href="{% url 'desactivarPost' post.id %}">Desactivar</a></span>
+                                
+                            {% elif not post.estatus_post  %}
+                            <span><a class="btn btn-success mx-2 float-right btn-sm"
+                                href="{% url 'desactivarPost' post.id %}">Activar</a></span>
+                            
+                            {% endif %}
+
+                            {% endif %}
+                            <hr>
+                            <h2>{{ post.titulo_post }}</h2>
+                            <h4>{{ post.subtitulo_post }}</h4>
+                            <p>
+                                {{ post.contenido_post|safe }}
+                            </p>
+                            
+                            <img class="card-img-bottom" src="{{post.imagen_post.url}}">                        
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            
+            
+            
+            
+           
+        </div>
+        
+          
+        {% if request.user.is_authenticated %}
+        <h1 style="color: white;">Comentarios</h1>
+          <section class="mb-5">
+            <div class="card bg-light">
+                <div class="card-body" >
+                    <!-- Comment form-->
+                    <form class="mb-4" method="POST" action="{% url 'verPost' post.id %}">
+                        {% csrf_token %}
+                        
+                        {{ form_comentario.as_p}}
+                        
+                        <input class="btn btn-primary btn-sm" type="submit" value="Comentar">
+                    </form>
+                    <!-- Comment with nested comments-->
+                    
+                    <!-- Single comment-->
+                    {% for comment in comentario %}
+                    <div class="d-flex">
+                        <div class="flex-shrink-0"><img class="rounded-circle" style="height: 50px;" src="/media/avatars/{{comment.usuario_comentario.username}}.png " alt="..."></div>
+                        <div class="ms-3">
+                            
+                            <div class="fw-bold">{{ comment.usuario_comentario }}</div>
+                            {{ comment.comentario }}
+                           
+                        </div>
+                    </div>
+                    <br>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+        {% endif %}
+ 
+        
+    </div>
+    
+
+
+    
+    {% endblock contenido %}
+
+    {% block extraJS %}
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $('.eliminar').click(function(e){
+          e.preventDefault();
+          Swal.fire({
+          title: '¿Estás seguro?',
+          text: "No podrás revertir esto!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Si, eliminarlo!',
+          cancelButtonText : 'Cancelar'
+          
+          }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.href = "{% url 'borrarPost' post.id %}";
+          }
+          })
+        })
+    </script>
+    {% endblock extraJS %}

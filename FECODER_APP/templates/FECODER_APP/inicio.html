@@ -1,0 +1,204 @@
+{% extends "FECODER_APP/padre.html" %}
+
+{% load static %}
+
+{% block fotoUser %}
+    
+    {% if avatar %}
+        <img src="{{avatar}}" width="40px">
+    {% else  %}
+        <img src="/media/default.png" width="40px">
+    {% endif %}
+        
+{% endblock fotoUser %}
+    
+{% block contenido %}    
+            </div>
+            <!-- Side widgets-->
+            <div class="col-lg-4">
+                <!-- Search widget-->
+                <div class="card mb-4">
+
+
+                    <div class="card-header" style="background-color: gray">Buscar</div>
+                    <div class="card-body">
+                            
+
+
+                            <!-- Búsqueda de Posts-->
+                            
+
+
+                            <div class="post">
+                                <p>Posts</p>
+                            <form action="{% url 'buscandoPost' %}" method="GET">
+                                <div class="input-group 2">
+                                    <input class="form-control" type="text" name="titulo" id="titulo" placeholder="Ejemplo: Lenguajes más usados" aria-label="Enter search term..." aria-describedby="button-search" />
+                                    <button class="btn btn-primary" id="button-search" type="submit" >Buscar</button>
+                                </div>
+                            </form>
+                            <br>
+                            {% if error %}
+                                <div class="alert alert-danger">
+                                    {{ error }}
+                                </div>
+                            {% else %}  
+                                {% if x %}  
+                                    <div class="alert alert-danger">
+                                        {{ x }}
+                                    </div>
+                                
+
+                                {% else %}
+                                    {% if post %}
+                                    
+                                        
+                                    <div style="color: black">
+                                        
+                                        <p>Resultados:</p>
+                                        
+                                        <ul>
+                                        <!-- si nombre tiene datos -->
+                                        
+                                        
+                                        <li>Título: {{post.titulo_post}}</li>
+                                        <li>Fecha: {{post.fecha_post}}</li>
+                                        <br>
+                                       
+                                        </ul>
+                                    </div>
+
+                                         
+
+                                        
+                                          
+                                    {% endif %}
+                                    
+                                {% endif %}
+
+                            {% endif %}
+
+                            </div>
+
+
+
+
+                            
+                        
+                    </div>
+                
+                
+                </div>
+
+                
+        
+               
+               
+            </div>
+        </div>
+    
+{% endblock %}
+
+
+        
+  
+{% block GrandeGeneral %} 
+    <!-- si firs_post dtrae algo -->
+    {% if first_post %}
+        <div class="card mb-4" style="color:black">
+            <a href="{% url 'verPost' first_post.id %}"><img class="card-img-top" src="{{ first_post.imagen_post.url }}" width="850" height="350" alt="..." /></a>
+            <div class="card-body">
+                
+                <div class="small text-muted">{{first_post.fecha_post}} // Subido por {{first_post.usuario_post}}</div>
+                <h2 class="card-title h4">{{first_post.titulo_post}}</h2>
+                <p class="card-text">{{first_post.contenido_post|safe|slice:'0:60'}}... </p>
+                <a class="btn btn-primary" href="{% url 'verPost' first_post.id %}">Leer Mas →</a>
+            
+
+            </div>
+        </div>
+    {% else %}
+        <div class="alert alert-danger">
+            No hay posts
+        </div>
+    {% endif %}
+{% endblock %}
+    
+
+
+
+    
+        
+    
+    
+{% block post %} 
+{% for i in todos_post %} 
+
+    <!-- si el post esta activo -->
+    {% if i.estatus_post %}
+        <div class="card mb-4" style="color:black">
+            <a href="{% url 'verPost' i.id %}"><img class="card-img-top" src="{{ i.imagen_post.url }}" width="750" height="350" alt="..." /></a>
+            <div class="card-body">
+                <div class="small text-muted">{{i.fecha_post}} // Subido por {{i.usuario_post}}</div>
+                <h2 class="card-title h4">{{i.titulo_post}}</h2>
+                <p class="card-text">{{i.contenido_post|safe|slice:'0:60'}}... </p>
+                <a class="btn btn-primary" href="{% url 'verPost' i.id %}">Leer Mas →</a>
+            </div>
+        </div>
+    {% endif %}
+        
+        
+         
+{% endfor %}
+{% endblock %}
+    
+
+{% block formulario %}
+<h1 style="color: white;" class="fw-bolder">Contacto</h1>
+<br><br><br>
+    {% if formularioContacto.errors %}
+        <p style="color: red">¡Datos incorrectos!</p>
+    {% endif %}
+
+    {% if contactoCreado %}
+        <p style="color: green">Contacto hecho exitosamente!!</p>
+    {% endif %}
+    
+
+    {% if errorContacto %}
+        <p style="color: red">{{ error }}</p>
+    {% endif %}
+
+    
+        <div style="color: white">
+            <form action="{% url 'formularioContactos' %}" method="POST">{% csrf_token %}
+
+                <div class="form-group">
+                  {{ formularioContacto.as_table }}
+                </div>
+                <br>
+                <button class="btn btn-primary" id="button-search" type="submit" >Enviar</button>
+            </form>
+        </div>
+    
+    <br>
+{% endblock %}   
+    
+    
+
+    
+    
+    
+    
+      
+
+
+
+
+
+
+
+
+
+
+
