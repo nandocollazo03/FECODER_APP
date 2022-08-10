@@ -10,7 +10,7 @@ Es posible acceder al proyecto de dos formas:
 
 1. Descargando el repositorio desde GitHub haciendo clic [aquí](https://github.com/ShaditCuber/FECODER_APP/tree/new). 
     + Creando una carpeta, ej : ```entorno```
-    + Realizando ```git clone https://github.com/ShaditCuber/FECODER_APP/tree/new``` dentro de la carpeta
+    + Realizando ```git clone https://github.com/nandocollazo03/FECODER_APP.git``` dentro de la carpeta
 
 
 2. Directamente desde el sitio web subido a Heroku mediante el siguiente [enlace](https://fecoder.herokuapp.com/).
